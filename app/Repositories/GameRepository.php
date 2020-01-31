@@ -66,6 +66,20 @@ class GameRepository
         return $game;
     }
 
+    public function flag($id, $row, $col)
+    {
+        $game = Game::find($id);
+        // TODO: validate row and cols
+        // TODO: validate game state
+        $cell = $game->rows[$row]->cells[$col];
+        
+        if($cell->state == Cell::UNREVEALED) {
+            $cell->state = Cell::FLAGGED;
+            $cell->save();
+        }
+        return $game;
+    }
+
     public function create(array $attributes, $rows = 10, $cols = 10, $mines = 10) {
         $game = Game::create();
         for ($rowIndex = 0; $rowIndex < $rows; $rowIndex++) {

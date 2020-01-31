@@ -22,4 +22,4 @@ Route::get('games/{id}', 'GameController@show');
 Route::post('games', 'GameController@create');
 
 Route::patch('games/{id}/reveal/{row}/{col}', 'GameController@reveal');
-Route::patch('games/{id}/flag/{cell}', 'GameController@flag');
+Route::patch('games/{id}/flag/{row}/{col}', 'GameController@flag');
