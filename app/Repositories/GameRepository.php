@@ -48,6 +48,23 @@ class GameRepository
         return Game::with(['rows'])->find($id);
     }
 
+    public function reveal($id, $row, $col)
+    {
+        $game = Game::find($id);
+        // TODO: validate row and cols
+        // TODO: validate game state
+        $cell = $game->rows[$row]->cells[$col];
+        if($cell->state == Cell::UNREVEALED) {
+            if($cell->is_bomb) {
+                $game->state == Game::OVER;
+                $game->save();
+            } else {
+                $this->revealCell($cell);
+            }
+        }
+        return $game;
+    }
+
     public function create(array $attributes, $rows = 10, $cols = 10, $mines = 10) {
         $game = Game::create();
         for ($rowIndex = 0; $rowIndex < $rows; $rowIndex++) {
@@ -74,5 +91,11 @@ class GameRepository
 
         }
         return $game;
+    }
+
+    private function revealCell($cell)
+    {
+        $cell->state = Cell::REVEALED;
+        $cell->save();
     }
 }

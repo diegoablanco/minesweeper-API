@@ -21,5 +21,5 @@ Route::get('games', 'GameController@index');
 Route::get('games/{id}', 'GameController@show');
 Route::post('games', 'GameController@create');
 
-Route::patch('games/{id}/reveal/{cell}', 'GameController@reveal');
+Route::patch('games/{id}/reveal/{row}/{col}', 'GameController@reveal');
 Route::patch('games/{id}/flag/{cell}', 'GameController@flag');

@@ -34,8 +34,9 @@ class GameController extends Controller
         return response()->json(null, 405);
     }
 
-    public function reveal(Request $request, $cell)
+    public function reveal(Request $request, $id, $row, $col)
     {
-        return response()->json(null, 405);
+        $game = $this->repository->reveal($id, $row, $col);
+        return response()->json($game, 201);
     }
 }
