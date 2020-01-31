@@ -15,12 +15,12 @@ class GameController extends Controller
 
     public function index()
     {
-        return response()->json(null, 405);
+        return response()->json($this->repository->all());
     }
 
-    public function show(Request $request)
+    public function show(Request $request, $id)
     {
-        return response()->json(null, 405);
+        return response()->json($this->repository->find($id));
     }
 
     public function create(Request $request)

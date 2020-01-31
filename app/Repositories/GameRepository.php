@@ -38,6 +38,15 @@ class GameRepository
     {
         return Game::class;
     }
+    public function all()
+    {
+        return Game::all();
+    }
+
+    public function find($id)
+    {
+        return Game::with(['rows'])->find($id);
+    }
 
     public function create(array $attributes, $rows = 10, $cols = 10, $mines = 10) {
         $game = Game::create();
