@@ -54,9 +54,10 @@ class GameRepository
         // TODO: validate row and cols
         // TODO: validate game state
         $cell = $game->rows[$row]->cells[$col];
+        
         if($cell->state == Cell::UNREVEALED) {
             if($cell->is_bomb) {
-                $game->state == Game::OVER;
+                $game->state = Game::OVER;
                 $game->save();
             } else {
                 $this->revealCell($cell);
