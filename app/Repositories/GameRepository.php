@@ -69,13 +69,27 @@ class GameRepository
     public function flag($id, $row, $col)
     {
         $game = Game::find($id);
+        $gameCells = $game->rows->flatMap(function ($row) {
+            return $row->cells;
+        });
+        $bombCells = $gameCells->where('is_bomb');
+        $totalFlagged = $gameCells->where('state', Cell::FLAGGED)->count();
         // TODO: validate row and cols
         // TODO: validate game state
-        $cell = $game->rows[$row]->cells[$col];
-        
-        if($cell->state == Cell::UNREVEALED) {
-            $cell->state = Cell::FLAGGED;
-            $cell->save();
+
+        // check if there's flags left
+        if($totalFlagged < $bombCells->count()) {
+            $cell = $game->rows[$row]->cells[$col];
+            
+            if($cell->state == Cell::UNREVEALED) {
+                $cell->state = Cell::FLAGGED;
+                $cell->save();
+            }
+            // check game is finished
+            if($bombCells->where('state', Cell::FLAGGED)->count() == $bombCells->count()) {                
+                $game->state = Game::FINISHED;
+                $game->save();
+            }
         }
         return $game;
     }
