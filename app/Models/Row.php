@@ -12,6 +12,12 @@ class Row extends Model
      * @var array
      */
     protected $with = ['cells'];
+    /**
+     * The attributes that should be visible in arrays.
+     *
+     * @var array
+     */
+    protected $visible = ['cells'];
 
     /**
      * Get the cells for the row.
