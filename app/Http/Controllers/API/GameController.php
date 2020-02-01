@@ -40,4 +40,10 @@ class GameController extends Controller
         $game = $this->repository->flag($id, $row, $col);
         return response()->json($game, 201);
     }
+
+    public function question(Request $request, $id, $row, $col)
+    {
+        $game = $this->repository->question($id, $row, $col);
+        return response()->json($game, 201);
+    }
 }

@@ -10,4 +10,5 @@ class Cell extends Model
     const UNREVEALED = 'unrev';
     const REVEALED = 'rev';
     const FLAGGED = 'flagged';
+    const QUESTION = 'question';
 }

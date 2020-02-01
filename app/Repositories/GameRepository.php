@@ -94,6 +94,19 @@ class GameRepository
         return $game;
     }
 
+    public function question($id, $row, $col)
+    {
+        $game = Game::find($id);
+        // TODO: validate row and cols
+        // TODO: validate game state
+        $cell = $game->rows[$row]->cells[$col];
+        
+        $cell->state = Cell::QUESTION;
+
+        $cell->save();
+        return $game;
+    }
+
     public function create($rows = 10, $cols = 10, $mines = 10) {
         $game = Game::create();
         // validate params

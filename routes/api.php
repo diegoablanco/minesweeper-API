@@ -23,3 +23,4 @@ Route::post('games', 'GameController@create');
 
 Route::patch('games/{id}/reveal/{row}/{col}', 'GameController@reveal');
 Route::patch('games/{id}/flag/{row}/{col}', 'GameController@flag');
+Route::patch('games/{id}/question/{row}/{col}', 'GameController@question');
