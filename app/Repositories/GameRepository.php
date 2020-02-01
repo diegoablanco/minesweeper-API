@@ -60,7 +60,7 @@ class GameRepository
                 $game->state = Game::OVER;
                 $game->save();
             } else {
-                $this->revealCell($cell);
+                $this->revealCell($game, $cell);
             }
         }
         return $game;
@@ -108,9 +108,57 @@ class GameRepository
         return $game;
     }
 
-    private function revealCell($cell)
+    private function revealCell($game, $cell)
     {
+        $neighbouringCells = $this->getNeighbouringCells($game, $cell);
+        
+        $cell->neighbouring_bombs = $neighbouringCells->where('is_bomb')->count();
         $cell->state = Cell::REVEALED;
+
         $cell->save();
+
+        if($cell->neighbouring_bombs == 0) {
+            foreach($neighbouringCells as $neighbouringCell) {
+                revealCell($game, $neighbouringCell);
+            }
+        }
+    }
+
+    private function getNeighbouringCells($game, $cell)
+    {
+        $rowIndex = $game->rows->pluck('id')->search($cell->row_id);
+        $row = $game->rows[$rowIndex];
+        $colIndex = $row->cells->pluck('id')->search($cell->id);
+        $rowsCount = $game->rows->count();
+        $cellsCount = $row->cells->count();
+        $neighbouringCells = collect([]);
+
+        if($colIndex > 0) {
+            $neighbouringCells[] = $row->cells[$colIndex - 1];
+        }
+        if($colIndex < $cellsCount - 1) {
+            $neighbouringCells[] = $row->cells[$colIndex + 1];
+        }
+        if($rowIndex > 0) {
+            $upperRow = $game->rows[$rowIndex - 1];
+            $neighbouringCells[] = $upperRow->cells[$colIndex];
+            if($colIndex > 0) {
+                $neighbouringCells[] = $upperRow->cells[$colIndex - 1];
+            }
+            if($colIndex < $cellsCount - 1) {
+                $neighbouringCells[] = $upperRow->cells[$colIndex + 1];
+            }
+        }
+        if($rowIndex < $rowsCount - 1) {
+            $lowerRow = $game->rows[$rowIndex + 1];
+            $neighbouringCells[] = $lowerRow->cells[$colIndex];
+            if($colIndex > 0) {
+                $neighbouringCells[] = $lowerRow->cells[$colIndex - 1];
+            }
+            if($colIndex < $cellsCount - 1) {
+                $neighbouringCells[] = $lowerRow->cells[$colIndex + 1];
+            }
+        }
+        return $neighbouringCells;
     }
 }
