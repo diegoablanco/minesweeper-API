@@ -25,7 +25,7 @@ class GameController extends Controller
 
     public function create(Request $request)
     {
-        $game = $this->repository->create($request->all());
+        $game = $this->repository->create($request->rows, $request->cols, $request->mines);
         return response()->json($game, 201);
     }
 

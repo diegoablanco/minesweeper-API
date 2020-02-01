@@ -94,8 +94,19 @@ class GameRepository
         return $game;
     }
 
-    public function create(array $attributes, $rows = 10, $cols = 10, $mines = 10) {
+    public function create($rows = 10, $cols = 10, $mines = 10) {
         $game = Game::create();
+        // validate params
+        if($rows == 0) {
+            $rows = 1;
+        }
+        if($cols == 0) {
+            $cols = 1;
+        }
+        $maxMines = $rows * $cols;
+        if($mines > $maxMines) {
+            $mines = $maxMines;
+        }
         for ($rowIndex = 0; $rowIndex < $rows; $rowIndex++) {
             $row = new Row();
             $game->rows()->save($row);
@@ -104,7 +115,6 @@ class GameRepository
                 $row->cells()->save($cell);
             }
         }
-
         for($mineIndex = 0; $mineIndex < $mines; $mineIndex++) {
             $bombAdded = false;
             while(!$bombAdded) {
